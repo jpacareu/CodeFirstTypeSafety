@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache";
 import { addComment, deleteComment } from "@/app/_actions/actions";
 import AddComment from "@/components/AddComment";
 import React from "react";
-import { Schema } from "../../../../amplify/data/resource";
+import { Post } from "../../../../amplify/data/resource";
 
 const Posts = async ({ params }: { params: { id: string } }) => {
   if (!params.id) return null;
@@ -31,14 +31,14 @@ const Posts = async ({ params }: { params: { id: string } }) => {
     <div className="flex flex-col items-center p-4 gap-4">
       <h1 className="text-2xl font-bold">Post Information:</h1>
       <div className="border rounded w-1/2 m-auto bg-gray-200 p-4 ">
-        <h2>Title: {post.title}</h2>
+        <h2>Title: {post?.title}</h2>
       </div>
 
       {isSignedIn ? (
         <AddComment
           addComment={addComment}
           paramsId={params.id}
-          post={post as Schema["Post"]}
+          post={post as Post}
         />
       ) : null}
 

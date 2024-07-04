@@ -1,14 +1,14 @@
 "use client";
 import React, { useState } from "react";
-import { Schema } from "../../amplify/data/resource";
+import { Post, Schema } from "../../amplify/data/resource";
 
 const Comments = ({
   addComment,
   post,
   paramsId,
 }: {
-  addComment: (content: string, post: Schema["Post"], paramsId: string) => void;
-  post: Schema["Post"];
+  addComment: (content: string, post: Post, paramsId: string) => void;
+  post: Post;
   paramsId: string;
 }) => {
   const [comment, setComment] = useState("");

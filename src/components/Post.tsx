@@ -1,14 +1,14 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { Schema } from "../../amplify/data/resource";
+import type { Post } from "../../amplify/data/resource";
 
 const Post = ({
   post,
   onDelete,
   isSignedIn,
 }: {
-  post: Pick<Schema["Post"], "title" | "id">;
+  post: Pick<Post, "title" | "id">;
   onDelete: (id: string) => void;
   isSignedIn: boolean;
 }) => {

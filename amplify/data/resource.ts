@@ -8,23 +8,26 @@ specify that owners, authenticated via your Auth resource can "create",
 authenticated via an API key, can only "read" records.
 =========================================================================*/
 const schema = a.schema({
-  Post: a
-    .model({
-      title: a.string().required(),
-      comments: a.hasMany("Comment"),
-      owner: a.string().authorization([a.allow.owner().to(["read", "delete"])]),
-    })
-    .authorization([a.allow.public().to(["read"]), a.allow.owner()]),
   Comment: a
     .model({
       content: a.string().required(),
-      post: a.belongsTo("Post"),
-      owner: a.string().authorization([a.allow.owner().to(["read", "delete"])]),
+      postId: a.id(),
+      post: a.belongsTo("Post", "postId"),
+      owner: a.string()
     })
-    .authorization([a.allow.public().to(["read"]), a.allow.owner()]),
+    .authorization((allow) => [allow.publicApiKey()]),
+  Post: a
+    .model({
+      title: a.string().required(),
+      comments: a.hasMany("Comment", "postId"),
+      owner: a.string()
+    })
+    .authorization((allow) => [allow.publicApiKey()]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
+
+export type Post = Schema["Post"]["type"];
 
 export const data = defineData({
   schema,
@@ -42,7 +45,7 @@ Go to your frontend source code. From your client-side code, generate a
 Data client to make CRUDL requests to your table. (THIS SNIPPET WILL ONLY
 WORK IN THE FRONTEND CODE FILE.)
 
-Using JavaScript or Next.js React Server Components, Middleware, Server 
+Using JavaScript or Next.js React Server Components, Middleware, Server
 Actions or Pages Router? Review how to generate Data clients for those use
 cases: https://docs.amplify.aws/gen2/build-a-backend/data/connect-to-API/
 =========================================================================*/

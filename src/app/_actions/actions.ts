@@ -3,7 +3,7 @@
 import { cookieBasedClient } from "@/utils/amplify-utils";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { Schema } from "../../../amplify/data/resource";
+import { Post } from "../../../amplify/data/resource";
 
 export async function deleteComment(formData: FormData) {
   const id = formData.get("id")?.toString();
@@ -17,13 +17,13 @@ export async function deleteComment(formData: FormData) {
 
 export async function addComment(
   content: string,
-  post: Schema["Post"],
+  post: Post,
   paramsId: string
 ) {
   if (content.trim().length === 0) return;
   const { data: comment } = await cookieBasedClient.models.Comment.create({
-    post,
     content,
+    postId: post.id,
   });
 
   console.log("got comment", comment);
